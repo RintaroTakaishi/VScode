@@ -6,7 +6,7 @@ from sklearn import preprocessing
 
 def run(fold):
     #学習セットの読み込み
-    df = pd.read_csv("CFEC2\\input\\train_folds.csv")
+    df = pd.read_csv("../input/train_folds.csv")
 
     #インデックスと目的変数との列を除き、特徴量とする
     features = [
@@ -56,9 +56,10 @@ def run(fold):
     auc = metrics.roc_auc_score(df_valid.target.values, valid_preds)
 
     #AUCを表示
-    print(auc)
+    print(f"Fold = {fold}, AUC = {auc}")
 
 if __name__ == "__main__":
     #fold番号が0の分割に対して実行
     #引数を変えるだけで、任意の分割に対して実行できる
-    run(0)
+    for fold_ in range(5):
+        run(fold_)
