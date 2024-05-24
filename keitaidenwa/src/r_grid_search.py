@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     #特徴量にはprice_range以外のすべての列を使用
     #インデックス列はない
-    X = df.drop("price_range", axis=1).values
+    X = df.drop(["price_range", "three_g"], axis=1).values
     #目的変数の準備
     y = df.price_range.values
 
