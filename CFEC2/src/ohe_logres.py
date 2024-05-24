@@ -1,5 +1,7 @@
-import pandas as pd
+#データセットを学習用と検証用に分け、分割数を指定し、欠損値を処理し、
+# OneHotエンコーディングを適用し、ロジスティック回帰モデルを学習する関数を作成
 
+import pandas as pd
 from sklearn import linear_model
 from sklearn import metrics
 from sklearn import preprocessing
