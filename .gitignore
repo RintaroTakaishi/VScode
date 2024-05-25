@@ -1,3 +1,4 @@
 #testdata, traindata etc...
 *.csv
 *.ipynb
+*.txt

@@ -1,4 +1,4 @@
-#ランダムフォレストモデルを使ってグリッドサーチをどのように行うか
+#ランダムサーチ
 import numpy as np
 import pandas as pd
 
@@ -24,21 +24,26 @@ if __name__ == "__main__":
     #パラメータの探索範囲
     #辞書もしくはパラメータのリストの辞書
     param_grid = {
-        "n_estimators":[100, 200, 250, 300, 400, 500],
-        "max_depth": [1, 2, 5, 7, 11, 15],
+        "n_estimators": np.arange(100, 1500, 100),
+        "max_depth": np.arange(1, 31),
         "criterion": ["gini", "entropy"]
     }
 
-    #グリッドサーチの初期化
+    #ランダムサーチの初期化
     #estimatorはモデル
-    #param_gridは対象とするパラメータ
+    #param_distributionsは対象とするパラメータ
     #評価指数は正答率で、独自の評価指標の定義も可能
     #verboseは大きい値を設定すると、より詳細に出力される
     #cv=5はデータセットを5つに分割するという意味
     #(stratified k-fold公差検証法ではない)
-    model = model_selection.GridSearchCV(
+    #n_iterは反復数
+    #param_distributionsがパラメータのリストの辞書の場合、
+    #非復元ランダムサンプリングを実施
+    #param_distributionが分布の場合、復元ランダムサンプリングを実施
+    model = model_selection.RandomizedSearchCV(
         estimator=classifier,
-        param_grid=param_grid,
+        param_distributions=param_grid,
+        n_iter=20,
         scoring="accuracy",
         verbose=10,
         n_jobs=1,

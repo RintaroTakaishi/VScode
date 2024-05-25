@@ -16,13 +16,18 @@ df1 = pd.read_csv("../input/train.csv")
 df2 = pd.read_csv("../input/test.csv")
 
 # 3. 特徴量とターゲット変数の分離
-X = df1.drop(columns=["price_range", "three_g"], axis=1) 
+X = df1.drop(columns=["price_range", "three_g", "id"], axis=1) 
 y = df1['price_range']
-Xtest = df2.drop(columns="three_g", axis=1)
+Xtest = df2.drop(columns=["three_g", "id"], axis=1)
 
 
 # ランダムフォレストモデルの定義
-rf = RandomForestClassifier(criterion='gini', max_depth=11, n_estimators=400, random_state=42)
+rf = RandomForestClassifier(
+    criterion='gini', 
+    max_depth=11, 
+    n_estimators=300, 
+    random_state=42
+    )
 
 # モデルの学習
 rf.fit(X, y)
@@ -31,5 +36,10 @@ rf.fit(X, y)
 y_pred = rf.predict(Xtest)
 
 # 結果をCSVファイルに保存
-submission = pd.DataFrame({'id': Xtest['id'], 'price_range': y_pred})
-submission.to_csv("../output/predict02.csv", index=False, header=False)
+submission = pd.DataFrame(
+    {'id': df2['id'], 'price_range': y_pred}
+    )
+submission.to_csv(
+    "../output/predict04.csv", 
+    index=False, header=False
+    )
