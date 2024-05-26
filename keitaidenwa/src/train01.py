@@ -22,12 +22,7 @@ Xtest = df2.drop(columns=["three_g", "id"], axis=1)
 
 
 # ランダムフォレストモデルの定義
-rf = RandomForestClassifier(
-    criterion='gini', 
-    max_depth=11, 
-    n_estimators=300, 
-    random_state=42
-    )
+rf = RandomForestClassifier()
 
 # モデルの学習
 rf.fit(X, y)
@@ -40,6 +35,6 @@ submission = pd.DataFrame(
     {'id': df2['id'], 'price_range': y_pred}
     )
 submission.to_csv(
-    "../output/predict04.csv", 
+    "../output/predict05.csv", 
     index=False, header=False
     )
