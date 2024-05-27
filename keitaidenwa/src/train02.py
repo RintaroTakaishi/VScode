@@ -1,13 +1,16 @@
 import os
+import argparse
+
 import config
+import model_dispatcher
 
 import joblib
 import pandas as pd
 from sklearn import metrics
-from sklearn import tree
-from sklearn.ensemble import RandomForestClassifier
 
-def run(fold):
+
+
+def run(fold,model):
     #学習データセットの読み込み
     df = pd.read_csv(config.TRAINING_FILE)
 
@@ -27,16 +30,14 @@ def run(fold):
     x_valid = df_valid.drop("price_range", axis=1).values
     y_valid = df_valid.price_range.values
 
-    #scikit-learnのランダムフォレストのモデル定義
-    rf = RandomForestClassifier(
-        #パラメータ
-    )
+    #model_disparcherを用いてモデルを取り出す
+    clf = model_dispatcher.models[model]
 
     #モデルの学習
-    rf.fit(x_train, y_train)
+    clf.fit(x_train, y_train)
 
     #検証用データセットに対する予測
-    preds = rf.predict(x_valid)
+    preds = clf.predict(x_valid)
 
     #正答率を計算し表示
     accuracy = metrics.accuracy_score(y_valid, preds)
@@ -45,13 +46,36 @@ def run(fold):
     #モデルの保存
     #joblib.dump(rf, f"../models/dt_{fold}.bin")
     joblib.dump(
-        rf,
+        clf,
         os.path.join(config.MODEL_OUTOUT, f"dt_{fold}.bin")
     )
 
 if __name__ == "__main__":
-    run(fold=0)
-    run(fold=1)
-    run(fold=2)
-    run(fold=3)
-    run(fold=4)
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--model",
+        type=str
+    )
+
+    args = parser.parse_args()
+
+    run(
+        fold=0, 
+        model = args.model
+    )
+    run(
+        fold=1,
+        model = args.model
+        )
+    run(
+        fold=2,
+        model = args.model
+        )
+    run(
+        fold=3,
+        model = args.model)
+    run(
+        fold=4,
+        model = args.model
+        )
