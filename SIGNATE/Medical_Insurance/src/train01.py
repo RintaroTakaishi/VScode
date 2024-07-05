@@ -23,8 +23,11 @@ Xtest = df2.drop(columns=["id", "children"], axis=1)
 
 # ランダムフォレストモデルの定義
 rf = RandomForestClassifier(
-    n_estimators=100,         # 決定木の数
-    max_depth=5,             # 各決定木の最大深さ
+    n_estimators=200,         # 決定木の数
+    max_features="sqrt",
+    min_samples_leaf=1,
+    min_samples_split=2,
+    max_depth=10,             # 各決定木の最大深さ
     criterion='gini'
 )
 
@@ -39,6 +42,6 @@ submission = pd.DataFrame(
     {'id': df2['id'], "charges": y_pred}
     )
 submission.to_csv(
-    "../output/predict03.csv", 
+    "../output/predict09.csv", 
     index=False, header=False
     )

@@ -1,11 +1,8 @@
 #ランダムフォレストモデルを使ってグリッドサーチをどのように行うか
 import numpy as np
 import pandas as pd
-
-from sklearn import ensemble
-from sklearn import metrics
-from sklearn import model_selection
-
+from sklearn import ensemble, model_selection
+from sklearn.metrics import f1_score
 if __name__ == "__main__":
     #学習データセットの読み込み
     df = pd.read_csv("../input/train01.csv")
@@ -20,14 +17,17 @@ if __name__ == "__main__":
     #ランダムフォレストをn_jobs=-1という設定で利用
     #n_jobs=-1はすべて使うという意味
     classifier = ensemble.RandomForestClassifier(n_jobs=-1)
+ 
 
     #パラメータの探索範囲
     #辞書もしくはパラメータのリストの辞書
     param_grid = {
-        "n_estimators":[100, 200, 250, 300, 400, 500],
-        "max_depth": [1, 2, 5, 7, 11, 15],
-        # "criterion": ["gini", "entropy"]
-        "criterion": ["gini", "entropy"]
+        "n_estimators": [1000, 1500],
+        "max_depth": [5],
+        "min_samples_split": [15, 20],
+        "min_samples_leaf": [10,20],
+        "criterion": ["gini"],
+        "max_features": ["sqrt", "log2"]
     }
 
     #グリッドサーチの初期化
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     model = model_selection.GridSearchCV(
         estimator=classifier,
         param_grid=param_grid,
-        scoring="accuracy",
+        scoring='f1_macro',
         verbose=10,
         n_jobs=1,
         cv=5
